@@ -8,18 +8,18 @@ const chatRoutes = require("./routes/chat")
 const requestRoutes=require("./routes/request")
 const uplaodImageRoutes=require("./routes/uploadImage")
 
+
 const app = express();
-app.use(express.json());
-
-const port = process.env.Port || 3000;
-const host = process.env.Host || "0.0.0.0";
-let MongodbConnectionURI = process.env.CONNECTION_URI;
-
 app.use(cors({
   origin: "*",
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: "*"
 }));
+app.use(express.json());
+
+const port = process.env.Port || 3000;
+// const host = process.env.Host || "0.0.0.0";
+let MongodbConnectionURI = process.env.CONNECTION_URI;
 
 async function dbConnection() {
   await mongoose.connect(MongodbConnectionURI);
@@ -27,7 +27,7 @@ async function dbConnection() {
 }
 dbConnection().catch((err) => console.error(err));
 
-app.listen(port, host, () => {
+app.listen(port, () => {
   console.log("Server Is Listening ");
 });
 
