@@ -15,7 +15,11 @@ const port = process.env.Port || 3000;
 const host = process.env.Host || "0.0.0.0";
 let MongodbConnectionURI = process.env.CONNECTION_URI;
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: "*"
+}));
 
 async function dbConnection() {
   await mongoose.connect(MongodbConnectionURI);
