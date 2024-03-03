@@ -1,55 +1,53 @@
 const users = require("../models/user");
 const cloudinary = require("cloudinary").v2;
-const fs = require("fs");
-const path = require("path");
+const  streamifier= require("streamifier");
+require("dotenv").config();
+
 
 
 cloudinary.config({
-  cloud_name: "dgxcvannc",
-  api_key: "316958841918178",
-  api_secret: "KUnNI1sHQp9RMvAUJAei6mhn-Xk",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+  secure: true,
 });
 
-let uploadImage=async (req, res) => {
-    try {
-      const userId = req.body.id;
-     const dp=req.files['image'][0];
-      if (!dp)
-        return res.status(400).json({ error: "No File to Upload" });
 
-      const tempFilePath = path.join(
-        __dirname,
-        "../uploads/profilePicture",
-        dp.originalname
-      );
-      fs.writeFileSync(tempFilePath, dp.buffer);
-
-      const result = await cloudinary.uploader.upload(tempFilePath, {
-        resource_type: "image",
-        crossorigin: "anonymous",
-      });
-      if (!result) {
-        return res
-          .status(400)
-          .send({ error: "Cloudinary Image uploading Error !" });
-      }
-
-      fs.unlinkSync(tempFilePath);
-
-      const updateUser = await users.findByIdAndUpdate(
+const updateUser=async(userId,URL)=>{
+    const updatedUser = await users.findByIdAndUpdate(
         userId,
-        { profilePicture: result.secure_url },
+        { profilePicture: URL },
         { new: true }
       );
+   return updatedUser
+}
 
-      if (!updateUser) {
-        return res.status(400).send({ error: updateUser });
+ let uploadImage=async(req, res) =>{
+
+  const userId = req.body.id;
+     const dp=req.files['image'][0];
+     
+  const stream = await cloudinary.uploader.upload_stream(
+    {
+      folder: "demo",
+    },
+    (error, result) => {
+      if (error) 
+      {
+        console.error("Error processing file upload:", error);
+      return res.status(500).json({ error:"Some error occurred, please try again later"});
+    }
+    
+    const updatedUser=updateUser(userId,result.secure_url)
+
+      if (!updatedUser) {
+        return res.status(400).send({ error: updatedUser });
       }
       res.status(200).json({ url: result.secure_url, success: true });
-    } catch (error) {
-      console.error("Error processing file upload:", error);
-      res.status(500).json({ error:"Some error occurred, please try again later"});
     }
+  );
+  streamifier.createReadStream(dp.buffer).pipe(stream);
 }
+
 
 module.exports={uploadImage}
