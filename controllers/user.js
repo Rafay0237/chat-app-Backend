@@ -134,11 +134,11 @@ let Signup = async (req, res) => {
       return res.status(400).send({ message: "Email already Exists!" });
     }
     const { userName, email, password } = req.body;
-    if(password.length<8 || password==='')
+    if(password.length<6 || password==='')
     {
-    return res.status(400).send({ message: "Password can not be less than 8 Characters! " });
+    return res.status(400).send({ message: "Password can not be less than 6 Characters! " });
     }
-    if(userName.length<8)
+    if(userName.length<4)
     {
     return res.status(400).send({ message: "Username is too Short! " });
     }

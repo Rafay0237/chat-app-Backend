@@ -9,12 +9,12 @@ const userSchema=new mongoose.Schema({
     userName:{
         type: String,
         required:[true,'User name Is Required! '],
-        minlength:[8,'User name is too Short! ']
+        minlength:[4,'User name is too Short! ']
     },
     password:{
         type: String,
         required:[true,'Password Is Required! '],
-        minlength:[8,'Password is too Short! ']
+        minlength:[6,'Password is too Short! ']
     },
     profilePicture:{
         type:String,
