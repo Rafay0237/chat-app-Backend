@@ -46,7 +46,7 @@ let Login = async (req, res) => {
         algorithm: "HS256",
         expiresIn: "2d",
       });
-      res.status(200).send({ message: "Logged in Successfully", user, token });
+      res.status(200).send({ message: "Logged in Successfully", user, token,success:true });
     } else {
       return res
         .status(400)
