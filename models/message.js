@@ -9,10 +9,16 @@ sender:{
 },
 text:{
     type:String
+},
+seen:{
+ type:Boolean,
+ default:false
+},
+img:{
+    type:String
 }
 },{timestamps:true})
 
- const messages=mongoose.model("messages",MessageSchema)
+ const Messages=mongoose.model("messages",MessageSchema)
 
- module.exports=messages
-
+ module.exports=Messages

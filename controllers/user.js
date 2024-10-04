@@ -208,6 +208,24 @@ let verifyToken = async (req, res, next) => {
   }
 };
 
+let getChatBarData = async (req, res) => {
+  let { userId } = req.params;
+  try {
+    let user = await users.findOne({ _id: userId });
+    if (!user) return res.status(200).send({ found: false });
+    return res
+      .status(200)
+      .send({
+        profilePicture: user.profilePicture,
+        userName: user.userName,
+        freindId:user._id
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.toString() });
+  }
+};
+
 module.exports = {
   getuser,
   Login,
@@ -217,5 +235,6 @@ module.exports = {
   googleLogin,
   changeUsername,
   verifyToken,
-  getSearch
+  getSearch,
+  getChatBarData
 };

@@ -10,12 +10,15 @@ const {
   googleLogin,
   changeUsername,
   verifyToken,
-  getSearch
+  getSearch,
+  getChatBarData
 } = require("../controllers/user");
 
 router.get("/:id", getuser);
 
 router.get("/search-users/:username", getSearch);
+
+router.get("/get-chatBarData/:userId", getChatBarData);
 
 router.delete("/", deleteuser);
 
